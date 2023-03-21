@@ -1,0 +1,89 @@
+﻿@page
+@model Orders_service.Pages.Orders.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Order</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Order.Id" />
+            <div class="form-group">
+                <label asp-for="Order.Number" class="control-label"></label>
+                <input asp-for="Order.Number" class="form-control" />
+                <span asp-validation-for="Order.Number" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Order.Date" class="control-label"></label>
+                <input asp-for="Order.Date" class="form-control" />
+                <span asp-validation-for="Order.Date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Order.ProviderId" class="control-label"></label>
+                <select asp-for="Order.ProviderId" class="form-control" asp-items="ViewBag.Providers"></select>
+                <span asp-validation-for="Order.ProviderId" class="text-danger"></span>
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Order.Items[0].Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Order.Items[0].Quantity)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Order.Items[0].Unit)
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    @for (int i = 0; i < Model.Order?.Items?.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                <input asp-for="Order.Items[i].Name" class="form-control" />
+                                <input type="hidden" asp-for="Order.Items[i].Id" />
+                            </td>
+                            <td>
+                                <input asp-for="Order.Items[i].Quantity" class="form-control" />
+                            </td>
+                            <td>
+                                <input asp-for="Order.Items[i].Unit" class="form-control" />
+                            </td>
+                            <td>
+                                <input type="hidden" name="itemIndex" value="@i" />
+                                <input asp-page-handler="RemoveItem" formnovalidate type="submit" value="Remove" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <input asp-page-handler="AddItem" type="submit" value="Add item" />
+            <p></p>
+            <div class="form-group">
+                <p style="color:red">
+                    @Html.Raw(Model.ErrorMessage)
+                </p>
+                <input asp-page-handler="Save" type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <p></p>
+    <a asp-page="./Details" asp-route-id="@Model.Order?.Id">Back to Details</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

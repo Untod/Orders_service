@@ -1,0 +1,55 @@
+﻿@page "/"
+@model Orders_service.Pages.Orders.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+<form method="post">
+    <p>
+        From @Html.EditorFor(model => model.FromDateFilter) to @Html.EditorFor(model => model.ToDateFilter) <div class="col-md-4">Provider <select asp-for="ProviderId" class="form-control" asp-items="ViewBag.Providers"></select></div>
+    </p>
+    <p>
+        <input type="submit" value="Filter" />
+    </p>
+</form>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].Number)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Orders[0].ProviderId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Orders) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Number)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Provider.Name)
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
